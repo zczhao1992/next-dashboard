@@ -1,6 +1,6 @@
 import { Overview } from "./components/overview";
 import { RecentSales } from "./components/recentSales";
-import { UserNav } from "./components/UserNav";
+// import { UserNav } from "./components/UserNav";
 import { Sidebar } from "./components/Sidebar";
 import {
   Card,
@@ -25,7 +25,7 @@ export default function Dashboard() {
                 <div className="border-b">
                   <div className="flex h-16 items-center px-4">
                     <div className="ml-auto flex items-center space-x-4">
-                      <UserNav />
+                      {/* <UserNav /> */}
                     </div>
                   </div>
                 </div>
