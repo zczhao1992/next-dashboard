@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -13,8 +14,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export default function Login() {
-  const handleLogin = () => {
-    console.log("ddddddddddd");
+  const router = useRouter();
+
+  const handleLogin = async () => {
+    const res = await fetch("/api/user", {
+      method: "GET",
+    });
+    const data = await res.json();
+
+    console.log("daaaaa", data);
+
+    router.push("/dashboard", { scroll: false });
   };
 
   return (
@@ -26,7 +36,7 @@ export default function Login() {
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid gap-2">
-            <Label htmlFor="email">Useremail</Label>
+            <Label htmlFor="email">Email</Label>
             <Input id="email" type="email" placeholder="m@example.com" />
           </div>
           <div className="grid gap-2">
