@@ -8,13 +8,11 @@ export async function GET(req: Request) {
   //     email: "zc@email.com",
   //   },
   // });
-  return NextResponse.json(
-    {
-      data,
-      msg: "success",
-    },
-    { status: 200 }
-  );
+  return NextResponse.json({
+    status: 200,
+    data,
+    msg: "success",
+  });
 }
 
 export async function POST(req: Request) {
@@ -24,11 +22,9 @@ export async function POST(req: Request) {
     data: body.list,
   });
 
-  return NextResponse.json(
-    {
-      data: createMany,
-      msg: "success",
-    },
-    { status: 200 }
-  );
+  return NextResponse.json({
+    status: 200,
+    data: createMany,
+    msg: "success",
+  });
 }
