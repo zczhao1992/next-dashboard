@@ -18,12 +18,12 @@ const authOptions: NextAuthOptions = {
   callbacks: {
     // 调用 getSession 和 useSession 时会触发
     // 文档可查看 https://next-auth.js.org/configuration/callbacks
-    async session({ session, user }) {
-      if (user.id && session?.user) {
-        session.user.userId = user.id;
-      }
-      return session;
-    },
+    // async session({ session, user }) {
+    //   if (user.id && session?.user) {
+    //     session.user.userId = user.id;
+    //   }
+    //   return session;
+    // },
   },
 };
 
