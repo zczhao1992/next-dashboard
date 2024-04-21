@@ -1,7 +1,5 @@
 import { Overview } from "./components/overview";
 import { RecentSales } from "./components/recentSales";
-// import { UserNav } from "./components/UserNav";
-import { Sidebar } from "./components/Sidebar";
 import {
   Card,
   CardContent,
@@ -9,27 +7,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { playlists } from "./components/playlists";
+import Layout from "@/components/Layout";
 
 export default function Dashboard() {
   return (
-    <div className="border-t">
-      <div className="bg-background">
-        <div className="grid lg:grid-cols-5">
-          <Sidebar playlists={playlists} className="hidden lg:block" />
-          <div className="col-span-3 lg:col-span-4 lg:border-l">
-            <div className="h-full px-4 py-6 lg:px-8">
-              {/*  */}
-              222
+    <Layout curActive="/dashboard">
+      <div className="border-t">
+        <div className="bg-background">
+          <div className="grid lg:grid-cols-5">
+            <div className="col-span-3 lg:col-span-4 lg:border-l">
               <div className="hidden flex-col md:flex">
-                <div className="border-b">
-                  <div className="flex h-16 items-center px-4">
-                    <div className="ml-auto flex items-center space-x-4">
-                      {/* <UserNav /> */}
-                    </div>
-                  </div>
-                </div>
-
                 <div className="flex-1 space-y-4 p-8 pt-6">
                   <div className="flex items-center justify-between space-y-2">
                     <h2 className="text-3xl font-bold tracking-tight">
@@ -165,11 +152,10 @@ export default function Dashboard() {
                   </div>
                 </div>
               </div>
-              {/*  */}
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 }
