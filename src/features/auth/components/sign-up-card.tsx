@@ -1,3 +1,7 @@
+"use client";
+
+import { z } from "zod";
+import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -5,11 +9,11 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import Link from "next/link";
+
 import { DottedSeparator } from "@/components/dotted-separator";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { z } from "zod";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -33,7 +37,7 @@ import { useRegister } from "../api/use-register";
 // });
 
 export const SignUpCard = () => {
-  const { mutate } = useRegister();
+  const { mutate, isPending } = useRegister();
 
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
@@ -109,7 +113,7 @@ export const SignUpCard = () => {
                 </FormItem>
               )}
             />
-            <Button disabled={false} size="lg" className="w-full">
+            <Button disabled={isPending} size="lg" className="w-full">
               注册
             </Button>
           </form>
@@ -123,7 +127,7 @@ export const SignUpCard = () => {
       <CardContent className="p-7 flex flex-col gap-y-4">
         <Button
           className="w-full"
-          disabled={false}
+          disabled={isPending}
           variant="secondary"
           size="lg"
         >
@@ -132,7 +136,7 @@ export const SignUpCard = () => {
         </Button>
         <Button
           className="w-full"
-          disabled={false}
+          disabled={isPending}
           variant="secondary"
           size="lg"
         >

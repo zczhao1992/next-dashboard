@@ -1,9 +1,13 @@
+"use client";
+
+import { z } from "zod";
+import Link from "next/link";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DottedSeparator } from "@/components/dotted-separator";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import Link from "next/link";
-import { z } from "zod";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -26,7 +30,7 @@ import { useLogin } from "../api/use-login";
 // });
 
 export const SignInCard = () => {
-  const { mutate } = useLogin();
+  const { mutate, isPending } = useLogin();
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -87,7 +91,7 @@ export const SignInCard = () => {
               max={256}
               disabled={false}
             /> */}
-            <Button disabled={false} size="lg" className="w-full">
+            <Button disabled={isPending} size="lg" className="w-full">
               登录
             </Button>
           </form>
@@ -101,7 +105,7 @@ export const SignInCard = () => {
       <CardContent className="p-7 flex flex-col gap-y-4">
         <Button
           className="w-full"
-          disabled={false}
+          disabled={isPending}
           variant="secondary"
           size="lg"
         >
@@ -110,7 +114,7 @@ export const SignInCard = () => {
         </Button>
         <Button
           className="w-full"
-          disabled={false}
+          disabled={isPending}
           variant="secondary"
           size="lg"
         >
