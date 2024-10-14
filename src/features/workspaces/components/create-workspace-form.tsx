@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/form";
 import { useCreateWorkspace } from "../api/use-create-workspace";
 import { DottedSeparator } from "@/components/dotted-separator";
+import { useRouter } from "next/navigation";
 
 interface CreateWorkspaceFormPorps {
   onCancel?: () => void;
@@ -28,6 +29,8 @@ interface CreateWorkspaceFormPorps {
 
 export const CreateWorkspaceForm = ({ onCancel }: CreateWorkspaceFormPorps) => {
   const { mutate, isPending } = useCreateWorkspace();
+
+  const router = useRouter();
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -47,8 +50,10 @@ export const CreateWorkspaceForm = ({ onCancel }: CreateWorkspaceFormPorps) => {
     mutate(
       { form: finalValues },
       {
-        onSuccess: () => {
+        onSuccess: ({ data }) => {
           form.reset();
+          onCancel?.();
+          router.push(`/workspaces/${data.$id}`);
         },
       }
     );
