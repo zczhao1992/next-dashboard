@@ -14,7 +14,9 @@ import {
   type Users as UsersType,
 } from "node-appwrite";
 import { AUTH_COOKIE } from "@/features/auth/constants";
+import { getMember } from "@/features/members/utils";
 import { MEMBERS_ID, DATABASE_ID, WORKSPACES_ID } from "@/config";
+import { Workspace } from "./types";
 
 export const getWorkspaces = async () => {
   try {
@@ -51,5 +53,47 @@ export const getWorkspaces = async () => {
     return workspace;
   } catch {
     return { documents: [], total: 0 };
+  }
+};
+
+interface GetWorkspaceProps {
+  workspaceId: string;
+}
+
+export const getWorkspace = async ({ workspaceId }: GetWorkspaceProps) => {
+  try {
+    const client = new Client()
+      .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
+      .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT!);
+
+    const session = await cookies().get(AUTH_COOKIE);
+
+    if (!session) return null;
+
+    client.setSession(session.value);
+
+    const databases = new Databases(client);
+    const account = new Account(client);
+    const user = await account.get();
+
+    const member = await getMember({
+      databases,
+      userId: user.$id,
+      workspaceId,
+    });
+
+    if (!member) {
+      return null;
+    }
+
+    const workspace = await databases.getDocument<Workspace>(
+      DATABASE_ID,
+      WORKSPACES_ID,
+      workspaceId
+    );
+
+    return workspace;
+  } catch {
+    return null;
   }
 };
