@@ -1,7 +1,7 @@
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { InferRequestType, InferResponseType } from "hono";
-
+import { useRouter } from "next/navigation";
 import { client } from "@/lib/rpc";
 
 type ResponseType = InferResponseType<
@@ -13,6 +13,7 @@ type RequestType = InferRequestType<
 >;
 
 export const useResetInviteCode = () => {
+  const router = useRouter();
   const queryClient = useQueryClient();
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
@@ -31,6 +32,7 @@ export const useResetInviteCode = () => {
     },
     onSuccess: ({ data }) => {
       toast.success("重置成功！");
+      router.refresh();
       queryClient.invalidateQueries({ queryKey: ["workspaces"] });
       queryClient.invalidateQueries({ queryKey: ["workspace", data.$id] });
     },

@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { ArrowLeftIcon, CopyIcon, ImageIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { updateWorkspaceSchema } from "../schemas";
+import { updateProjectSchema } from "../schemas";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -20,49 +20,39 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { toast } from "sonner";
-import { useUpdateWorkspace } from "../api/use-update-workspace";
+import { useUpdateProject } from "../api/use-update-project";
+import { useDeleteProject } from "../api/use-delete-project";
 import { DottedSeparator } from "@/components/dotted-separator";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Workspace } from "../types";
+import { Project } from "../types";
 import { useConfirm } from "@/hooks/use-confirm";
-import { useDeleteWorkspace } from "../api/use-delete-workspace";
-import { useResetInviteCode } from "../api/use-reset-invite-code";
 
-interface EditWorkspaceFormPorps {
+interface EditProjectFormPorps {
   onCancel?: () => void;
-  initialValues: Workspace;
+  initialValues: Project;
 }
 
-export const EditWorkspaceForm = ({
+export const EditProjectForm = ({
   onCancel,
   initialValues,
-}: EditWorkspaceFormPorps) => {
-  const { mutate, isPending } = useUpdateWorkspace();
-  const { mutate: deleteWorkspace, isPending: isDeletingWorkspace } =
-    useDeleteWorkspace();
-
-  const { mutate: resetInviteCode, isPending: isResettingInviteCode } =
-    useResetInviteCode();
+}: EditProjectFormPorps) => {
+  const { mutate, isPending } = useUpdateProject();
+  const { mutate: deleteProject, isPending: isDeletingProject } =
+    useDeleteProject();
 
   const router = useRouter();
 
   const [DeleteDialog, confirmDelete] = useConfirm(
-    "删除工作区",
+    "删除项目",
     "此操作不可撤销",
-    "destructive"
-  );
-
-  const [ResetDialog, confirmReset] = useConfirm(
-    "重置邀请链接",
-    "这将使当前的邀请链接无效",
     "destructive"
   );
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const form = useForm<z.infer<typeof updateWorkspaceSchema>>({
-    resolver: zodResolver(updateWorkspaceSchema),
+  const form = useForm<z.infer<typeof updateProjectSchema>>({
+    resolver: zodResolver(updateProjectSchema),
     defaultValues: {
       ...initialValues,
       image: initialValues.imageUrl ?? "",
@@ -74,26 +64,26 @@ export const EditWorkspaceForm = ({
 
     if (!ok) return;
 
-    deleteWorkspace(
+    deleteProject(
       {
-        param: { workspaceId: initialValues.$id },
+        param: { projectId: initialValues.$id },
       },
       {
         onSuccess: () => {
-          window.location.href = "/";
+          window.location.href = `/workspaces/${initialValues.workspaceId}`;
         },
       }
     );
   };
 
-  const onSubmit = (values: z.infer<typeof updateWorkspaceSchema>) => {
+  const onSubmit = (values: z.infer<typeof updateProjectSchema>) => {
     const finalValues = {
       ...values,
       image: values.image instanceof File ? values.image : "",
     };
     console.log({ values, finalValues });
     mutate(
-      { form: finalValues, param: { workspaceId: initialValues.$id } },
+      { form: finalValues, param: { projectId: initialValues.$id } },
       {
         onSuccess: () => {
           form.reset();
@@ -109,36 +99,11 @@ export const EditWorkspaceForm = ({
     }
   };
 
-  const fullInviteLink = () => {
-    const isBrowser = () => typeof window !== "undefined";
-    if (isBrowser()) {
-      return `${window.location.origin}/workspaces/${initialValues.$id}/join/${initialValues.inviteCode}`;
-    }
-    return "";
-  };
-
-  const handleCopyInviteLink = () => {
-    navigator.clipboard
-      .writeText(fullInviteLink())
-      .then(() => toast.success("邀请链接已复制到剪贴板"));
-  };
-
-  const handleResetInviteCode = async () => {
-    const ok = await confirmReset();
-
-    if (!ok) return;
-
-    resetInviteCode({
-      param: { workspaceId: initialValues.$id },
-    });
-  };
-
   return (
     <div className="flex flex-col gap-y-4">
       <DeleteDialog />
 
-      <ResetDialog />
-      {/* 修改工作区 */}
+      {/* 修改项目 */}
       <Card className="w-full h-full border-none shadow-none">
         <CardHeader className="flex flex-row items-center gap-x-4 p-7 space-y-0">
           <Button
@@ -147,7 +112,10 @@ export const EditWorkspaceForm = ({
             onClick={
               onCancel
                 ? onCancel
-                : () => router.push(`/workspaces/${initialValues.$id}`)
+                : () =>
+                    router.push(
+                      `/workspaces/${initialValues.workspaceId}/projects/${initialValues.$id}`
+                    )
             }
           >
             <ArrowLeftIcon className="size-4 mr-2" />
@@ -171,9 +139,9 @@ export const EditWorkspaceForm = ({
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>工作区名称</FormLabel>
+                      <FormLabel>项目名称</FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder="输入工作区名称" />
+                        <Input {...field} placeholder="输入项目名称" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -208,7 +176,7 @@ export const EditWorkspaceForm = ({
                         )}
 
                         <div className="flex flex-col">
-                          <p className="text-sm">工作区图标</p>
+                          <p className="text-sm">项目图标</p>
                           <p className="text-sm text-muted-foreground">
                             支持JPG, PNG, SVG, JPEG等格式, 不得大于1mb
                           </p>
@@ -277,58 +245,24 @@ export const EditWorkspaceForm = ({
           </Form>
         </CardContent>
       </Card>
-      {/* 邀请成员 */}
-      <Card className="w-full h-full border-none shadow-none">
-        <CardContent className="p-7">
-          <div className="flex flex-col">
-            <h3 className="font-bold">邀请成员</h3>
-            <p className="text-sm text-muted-foreground">
-              使用邀请链接将成员添加到您的工作区。
-            </p>
-            <div className="mt-4">
-              <div className="flex items-center gap-x-2">
-                <Input disabled value={fullInviteLink()} />
-                <Button
-                  onClick={handleCopyInviteLink}
-                  variant="secondary"
-                  className="size-12"
-                >
-                  <CopyIcon className="size-5" />
-                </Button>
-              </div>
-            </div>
-            <DottedSeparator className="py-7" />
-            <Button
-              size="sm"
-              variant="destructive"
-              type="button"
-              className="mt-6 w-fit ml-auto"
-              disabled={isPending || isResettingInviteCode}
-              onClick={handleResetInviteCode}
-            >
-              重置邀请链接
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
 
-      {/* 删除工作区 */}
+      {/* 删除项目 */}
       <Card className="w-full h-full border-none shadow-none">
         <CardContent className="p-7">
           <div className="flex flex-col">
-            <h3 className="font-bold">删除工作区</h3>
+            <h3 className="font-bold">删除项目</h3>
             <p className="text-sm text-muted-foreground">
-              删除工作区不可撤销，将删除所有相关的数据。
+              删除项目不可撤销，将删除所有相关的数据。
             </p>
             <Button
               size="sm"
               variant="destructive"
               type="button"
               className="mt-6 w-fit ml-auto"
-              disabled={isPending || isDeletingWorkspace}
+              disabled={isPending || isDeletingProject}
               onClick={handleDelete}
             >
-              删除工作区
+              删除项目
             </Button>
           </div>
         </CardContent>
