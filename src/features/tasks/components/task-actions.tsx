@@ -11,6 +11,7 @@ import { ExternalLinkIcon, PencilIcon, TrashIcon } from "lucide-react";
 import { useDeleteTask } from "../api/use-delete-task";
 import { useRouter } from "next/navigation";
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
+import { useEditTaskModal } from "../hooks/use-edit-task-modal";
 
 interface TaskActionsProps {
   id: string;
@@ -21,6 +22,9 @@ interface TaskActionsProps {
 export const TaskActions = ({ id, projectId, children }: TaskActionsProps) => {
   const router = useRouter();
   const workspaceId = useWorkspaceId();
+
+  const { open } = useEditTaskModal();
+
   const [ConfirmDialog, confirm] = useConfirm(
     "删除任务",
     "此操作不可逆",
@@ -63,7 +67,10 @@ export const TaskActions = ({ id, projectId, children }: TaskActionsProps) => {
             <ExternalLinkIcon className="size-4 mr-2 stroke-2" />
             打开项目
           </DropdownMenuItem>
-          <DropdownMenuItem className="font-medium p-[10px]" onClick={() => {}}>
+          <DropdownMenuItem
+            className="font-medium p-[10px]"
+            onClick={() => open(id)}
+          >
             <PencilIcon className="size-4 mr-2 stroke-2" />
             编辑任务
           </DropdownMenuItem>

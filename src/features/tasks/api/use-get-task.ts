@@ -1,55 +1,25 @@
-import { useQuery } from "@tanstack/react-query";
-import { TaskStatus } from "../types";
 import { client } from "@/lib/rpc";
+import { useQuery } from "@tanstack/react-query";
 
-interface UseGetTaskProps {
-  workspaceId: string;
-  projectId?: string | null;
-  status?: TaskStatus | null;
-  assigneeId?: string | null;
-  search?: string | null;
-  dueDate?: string | null;
+interface useGetTaskProps {
+  taskId: string;
 }
 
-export const useGetTask = ({
-  workspaceId,
-  projectId,
-  status,
-  assigneeId,
-  search,
-  dueDate,
-}: UseGetTaskProps) => {
+export const useGetTask = ({ taskId }: useGetTaskProps) => {
   const query = useQuery({
-    queryKey: [
-      "tasks",
-      workspaceId,
-      projectId,
-      status,
-      assigneeId,
-      search,
-      dueDate,
-    ],
+    queryKey: ["task", taskId],
     queryFn: async () => {
-      const response = await client.api.tasks.$get({
-        query: {
-          workspaceId,
-          projectId: projectId ?? undefined,
-          status: status ?? undefined,
-          assigneeId: assigneeId ?? undefined,
-          search: search ?? undefined,
-          dueDate: dueDate ?? undefined,
-        },
+      const response = await client.api.tasks[":taskId"].$get({
+        param: { taskId },
       });
 
       if (!response.ok) {
-        throw new Error("获取任务列表失败");
+        throw new Error("获取任务失败");
       }
 
       const { data } = await response.json();
-
       return data;
     },
   });
-
   return query;
 };

@@ -6,7 +6,7 @@ import { DottedSeparator } from "@/components/dotted-separator";
 import { Loader, PlusIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { useCreateTaskModal } from "../hooks/use-create-task-modal";
-import { useGetTask } from "../api/use-get-task";
+import { useGetTasks } from "../api/use-get-tasks";
 import { DataFilters } from "@/components/data-filters";
 import { useTaskFilters } from "../hooks/use-task-filters";
 import { DataTable } from "./data-table";
@@ -23,7 +23,7 @@ export const TaskViewSwitcher = () => {
 
   const [{ projectId, status, assigneeId, dueDate }] = useTaskFilters();
 
-  const { data: tasks, isLoading: isLoadingTasks } = useGetTask({
+  const { data: tasks, isLoading: isLoadingTasks } = useGetTasks({
     workspaceId,
     projectId,
     status,
