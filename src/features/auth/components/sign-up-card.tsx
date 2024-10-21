@@ -13,7 +13,7 @@ import {
 import { DottedSeparator } from "@/components/dotted-separator";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-
+import { signUpWithGithub, signUpWithGoogle } from "@/lib/oauth";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -130,6 +130,7 @@ export const SignUpCard = () => {
           disabled={isPending}
           variant="secondary"
           size="lg"
+          onClick={() => signUpWithGoogle()}
         >
           <FcGoogle className="mr-2 size-5" />
           使用Google账号
@@ -139,6 +140,7 @@ export const SignUpCard = () => {
           disabled={isPending}
           variant="secondary"
           size="lg"
+          onClick={() => signUpWithGithub()}
         >
           <FaGithub className="mr-2 size-5" />
           使用Github账号
