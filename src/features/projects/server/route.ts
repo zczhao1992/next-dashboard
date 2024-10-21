@@ -35,7 +35,7 @@ const app = new Hono()
 
       let uploadedImageUrl: string | undefined;
 
-      if (image instanceof globalThis.File) {
+      if (image instanceof File) {
         const file = await storage.createFile(
           IMAGES_BUCKET_ID,
           ID.unique(),
@@ -148,7 +148,7 @@ const app = new Hono()
 
       let uploadedImageUrl: string | undefined;
 
-      if (image instanceof globalThis.File) {
+      if (image instanceof File) {
         const file = await storage.createFile(
           IMAGES_BUCKET_ID,
           ID.unique(),
