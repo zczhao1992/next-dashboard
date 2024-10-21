@@ -13,11 +13,18 @@ import { useTaskFilters } from "../hooks/use-task-filters";
 import { DataTable } from "./data-table";
 import { DataKanban } from "./data-kanban";
 import { columns } from "./columns";
+import { DataCalendar } from "./data-calendar";
 import { TaskStatus } from "../types";
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
 import { useBulkUpdateTask } from "../api/use-bulk-update-task";
 
-export const TaskViewSwitcher = () => {
+interface TaskViewSwitcherProps {
+  hideProjectFilter?: boolean;
+}
+
+export const TaskViewSwitcher = ({
+  hideProjectFilter,
+}: TaskViewSwitcherProps) => {
   const [view, setView] = useQueryState("task-view", {
     defaultValue: "table",
   });
@@ -73,7 +80,7 @@ export const TaskViewSwitcher = () => {
         </div>
         <DottedSeparator className="my-4" />
         {/* 过滤 */}
-        <DataFilters hideProjectFilters={false} />
+        <DataFilters hideProjectFilters={hideProjectFilter} />
         <DottedSeparator className="my-4" />
         {isLoadingTasks ? (
           <div className="w-full border rounded-lg h-[200px] flex flex-col items-center justify-center">
@@ -90,8 +97,8 @@ export const TaskViewSwitcher = () => {
                 data={tasks?.documents ?? []}
               />
             </TabsContent>
-            <TabsContent value="calendar" className="mt-0">
-              calendar
+            <TabsContent value="calendar" className="mt-0 h-full pb-4">
+              <DataCalendar data={tasks?.documents ?? []} />
             </TabsContent>
           </>
         )}
