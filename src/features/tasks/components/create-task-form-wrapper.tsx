@@ -1,5 +1,5 @@
 import { useGetMembers } from "@/features/members/api/use-get-members";
-import { useGetProjects } from "@/features/projects/api/use-get-project";
+import { useGetProjects } from "@/features/projects/api/use-get-projects";
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CreateTasksForm } from "./create-task-form";

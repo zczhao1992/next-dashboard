@@ -25,20 +25,16 @@ export const TaskOverview = ({ task }: TaskOverviewProps) => {
   };
 
   return (
-    <div className=" flex flex-col gap-y-4 col-span-1">
+    <div className="flex flex-col gap-y-4 col-span-1">
       <div className="bg-muted rounded-lg p-4 ">
         <div className="flex items-center justify-between">
           <p className="text-lg font-semibold"> 详情 </p>
-          <Button
-            onClick={() => open(task.$id)}
-            size={"sm"}
-            variant={"secondary"}
-          >
+          <Button onClick={() => open(task.$id)} size="sm" variant="secondary">
             <Pen className="size-4 mr-2" />
             编辑
           </Button>
         </div>
-        <DottedSeparator className="my-3" />
+        <DottedSeparator className="my-4" />
         <div className="flex flex-col gap-y-4">
           <OverviewProperty label="成员">
             <MemberAvatar name={task.assignee.name} className="size-6" />

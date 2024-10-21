@@ -4,7 +4,7 @@ import Link from "next/link";
 import { RiAddCircleFill } from "react-icons/ri";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
-import { useGetProjects } from "@/features/projects/api/use-get-project";
+import { useGetProjects } from "@/features/projects/api/use-get-projects";
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
 import { useCreateProjectModal } from "@/features/projects/hooks/use-create-project-modal";
 import { ProjectAvatar } from "@/features/projects/components/project-avatar";

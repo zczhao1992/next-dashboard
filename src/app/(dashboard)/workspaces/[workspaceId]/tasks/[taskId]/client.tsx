@@ -19,7 +19,7 @@ const TaskIdClient = () => {
   }
 
   if (!data) {
-    return <PageError message="Task not Found" />;
+    return <PageError message="没找到该任务" />;
   }
 
   return (

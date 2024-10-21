@@ -62,15 +62,7 @@ export const EditTaskForm = ({
   });
 
   const onSubmit = (values: z.infer<typeof createTaskSchema>) => {
-    mutate(
-      { json: values, param: { taskId: initialValues.$id } },
-      {
-        onSuccess: () => {
-          form.reset();
-          onCancel?.();
-        },
-      }
-    );
+    mutate({ json: values, param: { taskId: initialValues.$id } });
   };
 
   return (

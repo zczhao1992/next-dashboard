@@ -57,14 +57,14 @@ export const TaskBreadcrumbs = ({ project, task }: TaskBreadcrumbsProps) => {
           {project.name}
         </p>
       </Link>
-      <ChevronRightIcon className=" size-4 lg:size-5 text-muted-foreground" />
+      <ChevronRightIcon className="size-4 lg:size-5 text-muted-foreground" />
       <p className="text-sm lg:text-lg font-semibold">{task.name}</p>
       <Button
         onClick={handleDeleteTask}
         disabled={isPending}
         className="ml-auto"
-        variant={"destructive"}
-        size={"sm"}
+        variant="destructive"
+        size="sm"
       >
         <TrashIcon className="size-4 lg:mr-2" />
         <span className="hidden lg:block"> 删除任务 </span>

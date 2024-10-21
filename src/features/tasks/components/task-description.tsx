@@ -30,8 +30,8 @@ export const TaskDescription = ({ task }: TaskDescriptionProps) => {
         <p className="text-lg font-semibold"> 描述 </p>
         <Button
           onClick={() => setIsEditing((prev) => !prev)}
-          size={"sm"}
-          variant={"secondary"}
+          size="sm"
+          variant="secondary"
         >
           {isEditing ? (
             <XIcon className="size-4 mr-2" />
@@ -41,9 +41,9 @@ export const TaskDescription = ({ task }: TaskDescriptionProps) => {
           {isEditing ? "取消" : "编辑"}
         </Button>
       </div>
-      <DottedSeparator className="my-3" />
+      <DottedSeparator className="my-4" />
       {isEditing ? (
-        <div className=" flex flex-col gap-y-4">
+        <div className="flex flex-col gap-y-4">
           <Textarea
             placeholder="添加描述 ..."
             value={value}
@@ -52,7 +52,7 @@ export const TaskDescription = ({ task }: TaskDescriptionProps) => {
             disabled={isPending}
           />
           <Button
-            size={"sm"}
+            size="sm"
             className="w-fit ml-auto"
             onClick={handleSave}
             disabled={isPending}
