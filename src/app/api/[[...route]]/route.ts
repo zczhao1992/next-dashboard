@@ -8,7 +8,7 @@ import tasks from "@/features/tasks/server/route";
 
 const app = new Hono().basePath("/api");
 
-// eslint-disable-next-line
+// eslint-disable-next-line @typescript-eslint/no-unused-var
 const routes = app
   .route("/auth", auth)
   .route("/workspaces", workspaces)
