@@ -94,7 +94,7 @@ const app = new Hono()
 
         return c.json({ data: workspace });
       } catch {
-        return c.json({ data: {} });
+        return c.json({ data: { $id: "d123" } });
       }
     }
   )
