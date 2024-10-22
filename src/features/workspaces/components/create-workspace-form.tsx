@@ -46,7 +46,8 @@ export const CreateWorkspaceForm = ({ onCancel }: CreateWorkspaceFormPorps) => {
     // console.log({ values });
     const finalValues = {
       ...values,
-      image: values.image instanceof File ? values.image : "",
+      // image: values.image instanceof File ? values.image : "",
+      image: "",
     };
     mutate(
       { form: finalValues },
@@ -63,7 +64,7 @@ export const CreateWorkspaceForm = ({ onCancel }: CreateWorkspaceFormPorps) => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      form.setValue("image", file);
+      form.setValue("image", "");
     }
   };
 
@@ -107,11 +108,7 @@ export const CreateWorkspaceForm = ({ onCancel }: CreateWorkspaceFormPorps) => {
                             alt="Logo"
                             fill
                             className="object-cover"
-                            src={
-                              field.value instanceof File
-                                ? URL.createObjectURL(field.value)
-                                : field.value
-                            }
+                            src={""}
                           />
                         </div>
                       ) : (

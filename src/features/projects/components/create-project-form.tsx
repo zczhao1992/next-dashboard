@@ -50,7 +50,8 @@ export const CreateProjectForm = ({ onCancel }: CreateProjectFormPorps) => {
     const finalValues = {
       ...values,
       workspaceId,
-      image: values.image instanceof File ? values.image : "",
+      // image: values.image instanceof File ? values.image : "",
+      image: "",
     };
     mutate(
       { form: finalValues },
@@ -66,7 +67,7 @@ export const CreateProjectForm = ({ onCancel }: CreateProjectFormPorps) => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      form.setValue("image", file);
+      form.setValue("image", "");
     }
   };
 
@@ -110,11 +111,7 @@ export const CreateProjectForm = ({ onCancel }: CreateProjectFormPorps) => {
                             alt="Logo"
                             fill
                             className="object-cover"
-                            src={
-                              field.value instanceof File
-                                ? URL.createObjectURL(field.value)
-                                : field.value
-                            }
+                            src={""}
                           />
                         </div>
                       ) : (

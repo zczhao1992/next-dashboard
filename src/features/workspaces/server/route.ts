@@ -55,24 +55,24 @@ const app = new Hono()
 
         const { name, image } = c.req.valid("form");
 
-        let uploadedImageUrl: string | undefined;
+        // let uploadedImageUrl: string | undefined;
 
-        if (image instanceof globalThis.File) {
-          const file = await storage.createFile(
-            IMAGES_BUCKET_ID,
-            ID.unique(),
-            image
-          );
+        // if (image instanceof globalThis.File) {
+        //   const file = await storage.createFile(
+        //     IMAGES_BUCKET_ID,
+        //     ID.unique(),
+        //     image
+        //   );
 
-          const arrayBuffer = await storage.getFilePreview(
-            IMAGES_BUCKET_ID,
-            file.$id
-          );
+        //   const arrayBuffer = await storage.getFilePreview(
+        //     IMAGES_BUCKET_ID,
+        //     file.$id
+        //   );
 
-          uploadedImageUrl = `data:image/png;base64,${Buffer.from(
-            arrayBuffer
-          ).toString("base64")}`;
-        }
+        //   uploadedImageUrl = `data:image/png;base64,${Buffer.from(
+        //     arrayBuffer
+        //   ).toString("base64")}`;
+        // }
 
         const workspace = await databases.createDocument<Workspace>(
           DATABASE_ID,
@@ -81,7 +81,7 @@ const app = new Hono()
           {
             name,
             userId: user.$id,
-            imageUrl: uploadedImageUrl,
+            imageUrl: image,
             inviteCode: generateInviteCode(10),
           }
         );
@@ -121,26 +121,26 @@ const app = new Hono()
           return c.json({ error: "身份错误" }, 401);
         }
 
-        let uploadedImageUrl: string | undefined;
+        // let uploadedImageUrl: string | undefined;
 
-        if (image instanceof globalThis.File) {
-          const file = await storage.createFile(
-            IMAGES_BUCKET_ID,
-            ID.unique(),
-            image
-          );
+        // if (image instanceof globalThis.File) {
+        //   const file = await storage.createFile(
+        //     IMAGES_BUCKET_ID,
+        //     ID.unique(),
+        //     image
+        //   );
 
-          const arrayBuffer = await storage.getFilePreview(
-            IMAGES_BUCKET_ID,
-            file.$id
-          );
+        //   const arrayBuffer = await storage.getFilePreview(
+        //     IMAGES_BUCKET_ID,
+        //     file.$id
+        //   );
 
-          uploadedImageUrl = `data:image/png;base64,${Buffer.from(
-            arrayBuffer
-          ).toString("base64")}`;
-        } else {
-          uploadedImageUrl = image;
-        }
+        //   uploadedImageUrl = `data:image/png;base64,${Buffer.from(
+        //     arrayBuffer
+        //   ).toString("base64")}`;
+        // } else {
+        //   uploadedImageUrl = image;
+        // }
 
         const workspace = await databases.updateDocument<Workspace>(
           DATABASE_ID,
@@ -148,7 +148,7 @@ const app = new Hono()
           workspaceId,
           {
             name,
-            imageUrl: uploadedImageUrl,
+            imageUrl: image,
           }
         );
 

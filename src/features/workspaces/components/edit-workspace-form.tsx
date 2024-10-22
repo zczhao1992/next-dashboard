@@ -89,7 +89,8 @@ export const EditWorkspaceForm = ({
   const onSubmit = (values: z.infer<typeof updateWorkspaceSchema>) => {
     const finalValues = {
       ...values,
-      image: values.image instanceof File ? values.image : "",
+      // image: values.image instanceof File ? values.image : "",
+      image: "",
     };
     console.log({ values, finalValues });
     mutate({ form: finalValues, param: { workspaceId: initialValues.$id } });
@@ -98,7 +99,7 @@ export const EditWorkspaceForm = ({
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      form.setValue("image", file);
+      form.setValue("image", "");
     }
   };
 
@@ -185,11 +186,7 @@ export const EditWorkspaceForm = ({
                               alt="Logo"
                               fill
                               className="object-cover"
-                              src={
-                                field.value instanceof File
-                                  ? URL.createObjectURL(field.value)
-                                  : field.value
-                              }
+                              src={""}
                             />
                           </div>
                         ) : (

@@ -34,24 +34,24 @@ const app = new Hono()
           return c.json({ error: "身份错误" }, 401);
         }
 
-        let uploadedImageUrl: string | undefined;
+        // let uploadedImageUrl: string | undefined;
 
-        if (image instanceof globalThis.File) {
-          const file = await storage.createFile(
-            IMAGES_BUCKET_ID,
-            ID.unique(),
-            image
-          );
+        // if (image instanceof globalThis.File) {
+        //   const file = await storage.createFile(
+        //     IMAGES_BUCKET_ID,
+        //     ID.unique(),
+        //     image
+        //   );
 
-          const arrayBuffer = await storage.getFilePreview(
-            IMAGES_BUCKET_ID,
-            file.$id
-          );
+        //   const arrayBuffer = await storage.getFilePreview(
+        //     IMAGES_BUCKET_ID,
+        //     file.$id
+        //   );
 
-          uploadedImageUrl = `data:image/png;base64,${Buffer.from(
-            arrayBuffer
-          ).toString("base64")}`;
-        }
+        //   uploadedImageUrl = `data:image/png;base64,${Buffer.from(
+        //     arrayBuffer
+        //   ).toString("base64")}`;
+        // }
 
         const project = await databases.createDocument(
           DATABASE_ID,
@@ -59,7 +59,7 @@ const app = new Hono()
           ID.unique(),
           {
             name,
-            imageUrl: uploadedImageUrl,
+            imageUrl: image,
             workspaceId,
           }
         );
@@ -151,26 +151,26 @@ const app = new Hono()
           return c.json({ error: "身份错误" }, 401);
         }
 
-        let uploadedImageUrl: string | undefined;
+        // let uploadedImageUrl: string | undefined;
 
-        if (image instanceof globalThis.File) {
-          const file = await storage.createFile(
-            IMAGES_BUCKET_ID,
-            ID.unique(),
-            image
-          );
+        // if (image instanceof globalThis.File) {
+        //   const file = await storage.createFile(
+        //     IMAGES_BUCKET_ID,
+        //     ID.unique(),
+        //     image
+        //   );
 
-          const arrayBuffer = await storage.getFilePreview(
-            IMAGES_BUCKET_ID,
-            file.$id
-          );
+        //   const arrayBuffer = await storage.getFilePreview(
+        //     IMAGES_BUCKET_ID,
+        //     file.$id
+        //   );
 
-          uploadedImageUrl = `data:image/png;base64,${Buffer.from(
-            arrayBuffer
-          ).toString("base64")}`;
-        } else {
-          uploadedImageUrl = image;
-        }
+        //   uploadedImageUrl = `data:image/png;base64,${Buffer.from(
+        //     arrayBuffer
+        //   ).toString("base64")}`;
+        // } else {
+        //   uploadedImageUrl = image;
+        // }
 
         const project = await databases.updateDocument(
           DATABASE_ID,
@@ -178,7 +178,7 @@ const app = new Hono()
           projectId,
           {
             name,
-            imageUrl: uploadedImageUrl,
+            imageUrl: image,
           }
         );
 
