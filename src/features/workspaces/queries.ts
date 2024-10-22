@@ -119,7 +119,8 @@ export const getWorkspaceInfo = async ({
       workspaceId
     );
 
-    return { name: workspace.name };
+    // return { name: workspace.name };
+    return { name: "" };
   } catch {
     return null;
   }

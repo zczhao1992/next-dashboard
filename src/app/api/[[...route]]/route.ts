@@ -11,7 +11,7 @@ const app = new Hono().basePath("/api");
 // eslint-disable-next-line
 const routes = app
   .route("/auth", auth)
-  // .route("/workspaces", workspaces)
+  .route("/workspaces", workspaces)
   .route("/members", members)
   .route("/projects", projects)
   .route("/tasks", tasks);
