@@ -15,42 +15,46 @@ const app = new Hono()
     sessionMiddleware,
     zValidator("query", z.object({ workspaceId: z.string() })),
     async (c) => {
-      const { users } = await createAdminClient();
+      try {
+        const { users } = await createAdminClient();
 
-      const databases = c.get("databases");
-      const user = c.get("user");
+        const databases = c.get("databases");
+        const user = c.get("user");
 
-      const { workspaceId } = c.req.valid("query");
+        const { workspaceId } = c.req.valid("query");
 
-      const member = await getMember({
-        databases,
-        workspaceId,
-        userId: user.$id,
-      });
+        const member = await getMember({
+          databases,
+          workspaceId,
+          userId: user.$id,
+        });
 
-      if (!member) {
+        if (!member) {
+          return c.json({ error: "账号错误" }, 401);
+        }
+
+        const members = await databases.listDocuments<Member>(
+          DATABASE_ID,
+          MEMBERS_ID,
+          [Query.equal("workspaceId", workspaceId)]
+        );
+
+        const populatedMembers = await Promise.all(
+          members.documents.map(async (member) => {
+            const user = await users.get(member.userId);
+
+            return {
+              ...member,
+              name: user.name || user.email,
+              email: user.email,
+            };
+          })
+        );
+
+        return c.json({ data: { ...members, documents: populatedMembers } });
+      } catch {
         return c.json({ error: "账号错误" }, 401);
       }
-
-      const members = await databases.listDocuments<Member>(
-        DATABASE_ID,
-        MEMBERS_ID,
-        [Query.equal("workspaceId", workspaceId)]
-      );
-
-      const populatedMembers = await Promise.all(
-        members.documents.map(async (member) => {
-          const user = await users.get(member.userId);
-
-          return {
-            ...member,
-            name: user.name || user.email,
-            email: user.email,
-          };
-        })
-      );
-
-      return c.json({ data: { ...members, documents: populatedMembers } });
     }
   )
   .delete("/:memberId", sessionMiddleware, async (c) => {
