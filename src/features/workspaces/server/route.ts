@@ -35,7 +35,7 @@ const app = new Hono()
 
     const workspaceIds = members.documents.map((member) => member.workspaceId);
 
-    const workspace = await databases.listDocuments(
+    const workspace = await databases.listDocuments<Workspace>(
       DATABASE_ID,
       WORKSPACES_ID,
       [Query.orderDesc("$createdAt"), Query.contains("$id", workspaceIds)]
@@ -52,7 +52,7 @@ const app = new Hono()
       const storage = c.get("storage");
       const user = c.get("user");
 
-      const { name = "default", image } = c.req.valid("form");
+      const { name, image } = c.req.valid("form");
 
       let uploadedImageUrl: string | undefined;
 
@@ -73,12 +73,12 @@ const app = new Hono()
         ).toString("base64")}`;
       }
 
-      const workspace = await databases.createDocument(
+      const workspace = await databases.createDocument<Workspace>(
         DATABASE_ID,
         WORKSPACES_ID,
         ID.unique(),
         {
-          name: name,
+          name,
           userId: user.$id,
           imageUrl: uploadedImageUrl,
           inviteCode: generateInviteCode(10),
@@ -104,7 +104,7 @@ const app = new Hono()
       const user = c.get("user");
 
       const { workspaceId } = c.req.param();
-      const { name = "default", image } = c.req.valid("form");
+      const { name, image } = c.req.valid("form");
 
       const member = await getMember({
         databases,
@@ -137,12 +137,12 @@ const app = new Hono()
         uploadedImageUrl = image;
       }
 
-      const workspace = await databases.updateDocument(
+      const workspace = await databases.updateDocument<Workspace>(
         DATABASE_ID,
         WORKSPACES_ID,
         workspaceId,
         {
-          name: name,
+          name,
           imageUrl: uploadedImageUrl,
         }
       );
@@ -186,7 +186,7 @@ const app = new Hono()
       return c.json({ error: "登录错误" }, 401);
     }
 
-    const workspace = await databases.updateDocument(
+    const workspace = await databases.updateDocument<Workspace>(
       DATABASE_ID,
       WORKSPACES_ID,
       workspaceId,
@@ -274,7 +274,7 @@ const app = new Hono()
     return c.json({
       data: {
         $id: workspaces.$id,
-        name: workspaces.name || "",
+        name: workspaces.name,
         imageUrl: workspaces.imageUrl,
       },
     });
