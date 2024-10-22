@@ -78,7 +78,7 @@ const app = new Hono()
         WORKSPACES_ID,
         ID.unique(),
         {
-          name,
+          name: name,
           userId: user.$id,
           imageUrl: uploadedImageUrl,
           inviteCode: generateInviteCode(10),
@@ -142,7 +142,7 @@ const app = new Hono()
         WORKSPACES_ID,
         workspaceId,
         {
-          name,
+          name: name,
           imageUrl: uploadedImageUrl,
         }
       );
@@ -274,7 +274,7 @@ const app = new Hono()
     return c.json({
       data: {
         $id: workspaces.$id,
-        name: workspaces.name,
+        name: workspaces.name || "",
         imageUrl: workspaces.imageUrl,
       },
     });
