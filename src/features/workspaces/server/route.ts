@@ -48,50 +48,54 @@ const app = new Hono()
     zValidator("form", createWorkspaceSchema),
     sessionMiddleware,
     async (c) => {
-      const databases = c.get("databases");
-      const storage = c.get("storage");
-      const user = c.get("user");
+      try {
+        const databases = c.get("databases");
+        const storage = c.get("storage");
+        const user = c.get("user");
 
-      const { name, image } = c.req.valid("form");
+        const { name, image } = c.req.valid("form");
 
-      let uploadedImageUrl: string | undefined;
+        let uploadedImageUrl: string | undefined;
 
-      if (image instanceof globalThis.File) {
-        const file = await storage.createFile(
-          IMAGES_BUCKET_ID,
-          ID.unique(),
-          image
-        );
+        if (image instanceof globalThis.File) {
+          const file = await storage.createFile(
+            IMAGES_BUCKET_ID,
+            ID.unique(),
+            image
+          );
 
-        const arrayBuffer = await storage.getFilePreview(
-          IMAGES_BUCKET_ID,
-          file.$id
-        );
+          const arrayBuffer = await storage.getFilePreview(
+            IMAGES_BUCKET_ID,
+            file.$id
+          );
 
-        uploadedImageUrl = `data:image/png;base64,${Buffer.from(
-          arrayBuffer
-        ).toString("base64")}`;
-      }
-
-      const workspace = await databases.createDocument<Workspace>(
-        DATABASE_ID,
-        WORKSPACES_ID,
-        ID.unique(),
-        {
-          name,
-          userId: user.$id,
-          imageUrl: uploadedImageUrl,
-          inviteCode: generateInviteCode(10),
+          uploadedImageUrl = `data:image/png;base64,${Buffer.from(
+            arrayBuffer
+          ).toString("base64")}`;
         }
-      );
 
-      await databases.createDocument(DATABASE_ID, MEMBERS_ID, ID.unique(), {
-        userId: user.$id,
-        workspaceId: workspace.$id,
-        role: MemberRole.ADMIN,
-      });
+        const workspace = await databases.createDocument<Workspace>(
+          DATABASE_ID,
+          WORKSPACES_ID,
+          ID.unique(),
+          {
+            name,
+            userId: user.$id,
+            imageUrl: uploadedImageUrl,
+            inviteCode: generateInviteCode(10),
+          }
+        );
 
-      return c.json({ data: workspace });
+        await databases.createDocument(DATABASE_ID, MEMBERS_ID, ID.unique(), {
+          userId: user.$id,
+          workspaceId: workspace.$id,
+          role: MemberRole.ADMIN,
+        });
+
+        return c.json({ data: workspace });
+      } catch {
+        return c.json({ data: {} });
+      }
     }
   )
   .patch(
@@ -99,55 +103,59 @@ const app = new Hono()
     sessionMiddleware,
     zValidator("form", updateWorkspaceSchema),
     async (c) => {
-      const databases = c.get("databases");
-      const storage = c.get("storage");
-      const user = c.get("user");
+      try {
+        const databases = c.get("databases");
+        const storage = c.get("storage");
+        const user = c.get("user");
 
-      const { workspaceId } = c.req.param();
-      const { name, image } = c.req.valid("form");
+        const { workspaceId } = c.req.param();
+        const { name, image } = c.req.valid("form");
 
-      const member = await getMember({
-        databases,
-        workspaceId,
-        userId: user.$id,
-      });
+        const member = await getMember({
+          databases,
+          workspaceId,
+          userId: user.$id,
+        });
 
-      if (!member || member.role !== MemberRole.ADMIN) {
-        return c.json({ error: "身份错误" }, 401);
-      }
-
-      let uploadedImageUrl: string | undefined;
-
-      if (image instanceof globalThis.File) {
-        const file = await storage.createFile(
-          IMAGES_BUCKET_ID,
-          ID.unique(),
-          image
-        );
-
-        const arrayBuffer = await storage.getFilePreview(
-          IMAGES_BUCKET_ID,
-          file.$id
-        );
-
-        uploadedImageUrl = `data:image/png;base64,${Buffer.from(
-          arrayBuffer
-        ).toString("base64")}`;
-      } else {
-        uploadedImageUrl = image;
-      }
-
-      const workspace = await databases.updateDocument<Workspace>(
-        DATABASE_ID,
-        WORKSPACES_ID,
-        workspaceId,
-        {
-          name,
-          imageUrl: uploadedImageUrl,
+        if (!member || member.role !== MemberRole.ADMIN) {
+          return c.json({ error: "身份错误" }, 401);
         }
-      );
 
-      return c.json({ data: workspace });
+        let uploadedImageUrl: string | undefined;
+
+        if (image instanceof globalThis.File) {
+          const file = await storage.createFile(
+            IMAGES_BUCKET_ID,
+            ID.unique(),
+            image
+          );
+
+          const arrayBuffer = await storage.getFilePreview(
+            IMAGES_BUCKET_ID,
+            file.$id
+          );
+
+          uploadedImageUrl = `data:image/png;base64,${Buffer.from(
+            arrayBuffer
+          ).toString("base64")}`;
+        } else {
+          uploadedImageUrl = image;
+        }
+
+        const workspace = await databases.updateDocument<Workspace>(
+          DATABASE_ID,
+          WORKSPACES_ID,
+          workspaceId,
+          {
+            name,
+            imageUrl: uploadedImageUrl,
+          }
+        );
+
+        return c.json({ data: workspace });
+      } catch {
+        return c.json({ data: {} });
+      }
     }
   )
   .delete("/:workspaceId", sessionMiddleware, async (c) => {
@@ -262,22 +270,26 @@ const app = new Hono()
     return c.json({ data: workspace });
   })
   .get("/:workspaceId/info", sessionMiddleware, async (c) => {
-    const databases = c.get("databases");
-    const { workspaceId } = c.req.param();
+    try {
+      const databases = c.get("databases");
+      const { workspaceId } = c.req.param();
 
-    const workspaces = await databases.getDocument<Workspace>(
-      DATABASE_ID,
-      WORKSPACES_ID,
-      workspaceId
-    );
+      const workspaces = await databases.getDocument<Workspace>(
+        DATABASE_ID,
+        WORKSPACES_ID,
+        workspaceId
+      );
 
-    return c.json({
-      data: {
-        $id: workspaces.$id,
-        name: workspaces.name,
-        imageUrl: workspaces.imageUrl,
-      },
-    });
+      return c.json({
+        data: {
+          $id: workspaces.$id,
+          name: workspaces.name,
+          imageUrl: workspaces.imageUrl,
+        },
+      });
+    } catch {
+      return c.json({ data: {} });
+    }
   })
   .get("/:workspaceId/analytics", sessionMiddleware, async (c) => {
     const user = c.get("user");
