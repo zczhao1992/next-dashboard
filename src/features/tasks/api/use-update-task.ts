@@ -34,6 +34,9 @@ export const useUpdateTask = () => {
       toast.success("更新成功！");
 
       router.refresh();
+      queryClient.invalidateQueries({ queryKey: ["project-analytics"] });
+      queryClient.invalidateQueries({ queryKey: ["workspace-analytics"] });
+
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
       queryClient.invalidateQueries({ queryKey: ["task", data.$id] });
     },
