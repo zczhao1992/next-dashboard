@@ -288,7 +288,7 @@ const app = new Hono()
         },
       });
     } catch {
-      return c.json({ data: {} });
+      return c.json({ data: { name: "dd" } });
     }
   })
   .get("/:workspaceId/analytics", sessionMiddleware, async (c) => {
