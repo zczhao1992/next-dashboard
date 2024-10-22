@@ -32,22 +32,26 @@ const app = new Hono()
     return c.json({ success: true });
   })
   .post("/register", zValidator("json", registerSchema), async (c) => {
-    const { name, email, password } = await c.req.valid("json");
+    try {
+      const { name, email, password } = await c.req.valid("json");
 
-    const { account } = await createAdminClient();
+      const { account } = await createAdminClient();
 
-    await account.create(ID.unique(), email, password, name);
+      await account.create(ID.unique(), email, password, name);
 
-    const session = await account.createEmailPasswordSession(email, password);
+      const session = await account.createEmailPasswordSession(email, password);
 
-    setCookie(c, AUTH_COOKIE, session.secret, {
-      path: "/",
-      httpOnly: true,
-      secure: true,
-      sameSite: "strict",
-      maxAge: 60 * 60 * 24 * 30,
-    });
-    return c.json({ success: true });
+      setCookie(c, AUTH_COOKIE, session.secret, {
+        path: "/",
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        maxAge: 60 * 60 * 24 * 30,
+      });
+      return c.json({ success: true });
+    } catch {
+      return c.json({ success: false });
+    }
   })
   .post("/logout", sessionMiddleware, async (c) => {
     const account = c.get("account");
