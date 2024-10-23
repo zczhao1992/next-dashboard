@@ -2,7 +2,7 @@
 
 ### 介绍
 
-next dashboard，基于 Next.js、radix-ui、shadcn/ui、TailWind css 开源的一套后台管理框架。
+next dashboard，基于 Next.js、radix-ui、shadcn/ui、TailWind css、Appwrit 开源的一套后台管理框架。
 
 ### 一、在线预览地址
 
@@ -14,8 +14,11 @@ next dashboard，基于 Next.js、radix-ui、shadcn/ui、TailWind css 开源的�
 
 ### 三、🔨🔨🔨 项目功能
 
-- 采用最新技术找开发：Next.js
-  (待更新)
+- 🚀 采用最新技术找开发：Next14、TypeScript、shadcn/ui、Appwrite、Hono.js 等
+- 🚀 支持身份认证，支持 Google、Github 账号登录
+- 🚀 使用 appwrite 作为后端服务，及数据库、文件上传、账户权限于一体
+- 🚀 整个项目集成了 TypeScript
+- 🚀 使用 react-big-calendar 作为日历组件
 
 ### 四、安装使用步骤 📑
 
@@ -57,7 +60,19 @@ npm run build:pro
 
 ### 五、项目截图
 
-(待更新)
+#### 1、登录页：
+
+![dashboard-login](./public/login.png)
+
+#### 2、首页：
+
+![dashboard-home](./public/home.png)
+
+#### 2、任务页：
+
+![dashboard-table](./public/table.png)
+![dashboard-kanban](./public/kanban.png)
+![dashboard-calendar](./public/calendar.png)
 
 ### 六、文件资源目录 📚
 
@@ -67,7 +82,10 @@ next-dashboard
 ├─ src
 │  ├─ app                 # 项目页面
 │  ├─ components          # 全局组件
-│  └─ lib                 # 工具
+│  ├─ features            # 业务功能
+│  ├─ hooks               # 通用函数
+│  ├─ lib                 # 工具方法
+│  └─ config.ts           # 全局变量
 ├─ .gitignore             # git 提交忽略
 ├─ components.json        # shadcn/ui 组件配置
 ├─ next-env.d.ts          # 环境变量配置
