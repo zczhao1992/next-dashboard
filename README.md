@@ -2,7 +2,7 @@
 
 ### 介绍
 
-next dashboard，基于 Next.js、radix-ui、shadcn/ui、TailWind css、Appwrit 开源的一套后台管理框架。
+next dashboard，基于 Next.js、radix-ui、shadcn/ui、TailWind css、Appwrite 开源的一套后台管理框架。
 
 ### 一、在线预览地址
 
