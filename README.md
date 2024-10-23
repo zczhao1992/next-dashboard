@@ -68,7 +68,7 @@ npm run build:pro
 
 ![dashboard-home](./public/home.png)
 
-#### 2、任务页：
+#### 3、任务页：
 
 ![dashboard-table](./public/table.png)
 ![dashboard-kanban](./public/kanban.png)
