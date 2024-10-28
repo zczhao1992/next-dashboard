@@ -165,7 +165,7 @@ export const CreateTasksForm = ({
                       <FormMessage />
                       <SelectContent>
                         <SelectItem value={TaskStatus.BACKLOG}>
-                          待开始
+                          待办事项
                         </SelectItem>
                         <SelectItem value={TaskStatus.IN_PROGRESS}>
                           进行中
@@ -174,7 +174,7 @@ export const CreateTasksForm = ({
                           审核中
                         </SelectItem>
                         <SelectItem value={TaskStatus.DONE}>已完成</SelectItem>
-                        <SelectItem value={TaskStatus.TODO}>未完成</SelectItem>
+                        <SelectItem value={TaskStatus.TODO}>待开始</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />

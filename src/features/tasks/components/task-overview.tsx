@@ -17,8 +17,8 @@ export const TaskOverview = ({ task }: TaskOverviewProps) => {
   const { open } = useEditTaskModal();
 
   const statusMap = {
-    BACKLOG: "待开始",
-    TODO: "未完成",
+    BACKLOG: "待办事项",
+    TODO: "待开始",
     IN_PROGRESS: "进行中",
     IN_REVIEW: "审核中",
     DONE: "已完成",
