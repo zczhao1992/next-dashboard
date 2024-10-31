@@ -8,7 +8,7 @@ export const createProjectSchema = z.object({
   //     z.string().transform((value) => (value === "" ? undefined : value)),
   //   ])
   //   .optional(),
-  image: z.string(),
+  image: z.string().optional(),
   workspaceId: z.string(),
 });
 
@@ -20,5 +20,5 @@ export const updateProjectSchema = z.object({
   //     z.string().transform((value) => (value === "" ? undefined : value)),
   //   ])
   //   .optional(),
-  image: z.string(),
+  image: z.string().optional(),
 });

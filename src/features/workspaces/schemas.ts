@@ -8,7 +8,7 @@ export const createWorkspaceSchema = z.object({
   //     z.string().transform((value) => (value === "" ? undefined : value)),
   //   ])
   //   .optional(),
-  image: z.string(),
+  image: z.string().optional(),
 });
 
 export const updateWorkspaceSchema = z.object({
@@ -19,5 +19,5 @@ export const updateWorkspaceSchema = z.object({
   //     z.string().transform((value) => (value === "" ? undefined : value)),
   //   ])
   //   .optional(),
-  image: z.string(),
+  image: z.string().optional(),
 });
