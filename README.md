@@ -7,7 +7,7 @@ next dashboard，基于 Next.js、radix-ui、shadcn/ui、TailWind css、Appwrite
 ### 一、在线预览地址
 
 - vercel(需要翻墙)：https://next-dashboard-zc.vercel.app
-- netlify(无需翻墙)：https://next-dashboard-zc.netlify.app/
+- netlify(无需翻墙)：https://next-dashboard-zc.netlify.app
 
 ### 二、Git 仓库地址 (欢迎 Star⭐)
 
